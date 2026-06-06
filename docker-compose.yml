@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ${BD_DATA_PATH}:/data
+      - /mnt/bdtracker_data:/data
     environment:
       - BD_ROOT_DIR=/data/bdtracker.db
       - BD_RAW_HOSTS=your_allowed_hosts       # e.g. "your_domain.com,192.168.1.1,localhost,etc"
