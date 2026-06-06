@@ -1,0 +1,15 @@
+{
+  "name": "BDTracker",
+  "short_name": "BDTracker",
+  "start_url": "/static/index.html",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/static/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

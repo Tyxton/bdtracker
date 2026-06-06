@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en" class="bg-zinc-950 text-zinc-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BDTracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body
+    class="p-6 bg-zinc-950 text-zinc-100 font-sans flex flex-col gap-6 min-h-screen antialiased"
+  >
+    <header
+      class="flex justify-between items-center bg-zinc-900 p-5 rounded-xl border border-zinc-800 shadow-sm"
+    >
+      <div class="flex items-center gap-3">
+        <h1 class="text-lg font-semibold tracking-tight text-zinc-200">
+          BDTracker - B. Tyler Sexton
+        </h1>
+        <span
+          id="statusBadge"
+          class="px-2.5 py-0.5 text-xs rounded-full bg-zinc-950 text-zinc-400 border border-zinc-800/80 font-medium transition-colors"
+        >
+          Connecting
+        </span>
+      </div>
+    </header>
+
+    <main class="flex flex-col gap-6 w-full">
+      <div
+        class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900/40 border border-zinc-800/70 p-4 rounded-xl shadow-xs"
+      >
+        <div class="flex items-center gap-2">
+          <span
+            class="text-xs font-semibold uppercase tracking-wider text-zinc-500 mr-1"
+            >State Focus:</span
+          >
+          <div
+            id="stateFilterGroup"
+            class="flex rounded-md bg-zinc-950 p-1 border border-zinc-800 text-xs"
+          >
+            <button
+              data-filter="All"
+              class="px-3 py-1.5 rounded-md font-medium text-emerald-400 bg-zinc-900"
+            >
+              All States
+            </button>
+            <button
+              data-filter="Baseline"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-zinc-200"
+            >
+              Baseline
+            </button>
+            <button
+              data-filter="Mixed"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-rose-400"
+            >
+              Mixed
+            </button>
+            <button
+              data-filter="Depressive"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-blue-400"
+            >
+              Depressive
+            </button>
+            <button
+              data-filter="Hypomanic"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-amber-400"
+            >
+              Hypomanic
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span
+            class="text-xs font-semibold uppercase tracking-wider text-zinc-500 mr-1"
+            >Time Range:</span
+          >
+          <div
+            id="timeFilterGroup"
+            class="flex rounded-md bg-zinc-950 p-1 border border-zinc-800 text-xs"
+          >
+            <button
+              data-window="1W"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-zinc-200"
+            >
+              1 Week
+            </button>
+            <button
+              data-window="1M"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-zinc-200"
+            >
+              1 Month
+            </button>
+            <button
+              data-window="3M"
+              class="px-3 py-1.5 rounded-md font-medium text-zinc-400 hover:text-zinc-200"
+            >
+              3 Months
+            </button>
+            <button
+              data-window="All"
+              class="px-3 py-1.5 rounded-md font-medium text-emerald-400 bg-zinc-900"
+            >
+              All History
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section
+        class="bg-zinc-900/50 border border-zinc-800 rounded-xl shadow-sm p-5 flex flex-col min-h-[360px] w-full"
+      >
+        <div
+          class="flex justify-between items-center mb-4 border-b border-zinc-800/60 pb-3"
+        >
+          <h2 class="text-sm font-semibold tracking-tight text-zinc-400">
+            Timeline Trends
+          </h2>
+        </div>
+        <div class="flex-1 relative w-full h-[280px]">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </section>
+
+      <section
+        class="bg-zinc-900/50 border border-zinc-800 rounded-xl shadow-sm p-5 flex flex-col w-full"
+      >
+        <div
+          class="flex justify-between items-center mb-4 border-b border-zinc-800/60 pb-3"
+        >
+          <h2 class="text-sm font-semibold tracking-tight text-zinc-400">
+            Historical Data Logs
+          </h2>
+        </div>
+        <div class="overflow-x-auto w-full">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr
+                class="border-b border-zinc-800 text-xs font-medium tracking-normal text-zinc-400"
+              >
+                <th class="py-3 px-4">Timestamp</th>
+                <th class="py-3 px-4">Journal Snippet & Core Triggers</th>
+                <th class="py-3 px-4 text-center">Mood</th>
+                <th class="py-3 px-4 text-center">Energy</th>
+                <th class="py-3 px-4 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody
+              id="matrixTableBody"
+              class="divide-y divide-zinc-800/30 text-sm text-zinc-300"
+            ></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Viewer Log Modal -->
+    <div
+      id="viewerModal"
+      class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4"
+    >
+      <div
+        class="bg-zinc-900 border border-zinc-800 w-full max-w-3xl rounded-xl p-6 shadow-xl flex flex-col gap-4"
+      >
+        <div
+          class="flex justify-between items-center border-b border-zinc-800 pb-3"
+        >
+          <h3
+            id="modalViewerTitle"
+            class="text-base font-semibold tracking-tight text-zinc-200"
+          >
+            Log Entry Record
+          </h3>
+          <button
+            id="closeViewerModalBtn"
+            class="text-zinc-400 hover:text-zinc-200 text-sm font-medium transition"
+          >
+            Close
+          </button>
+        </div>
+
+        <div
+          id="modalViewerMetrics"
+          class="flex gap-2 flex-wrap text-xs font-medium"
+        ></div>
+
+        <div id="modalViewerTags" class="flex flex-wrap gap-1.5 text-xs"></div>
+
+        <div
+          id="modalViewerContent"
+          class="bg-zinc-950 border border-zinc-800 p-4 rounded-lg text-sm text-zinc-300 leading-relaxed max-h-64 overflow-y-auto whitespace-pre-wrap"
+        ></div>
+      </div>
+    </div>
+    <script type="module" src="/static/js/app.js"></script>
+  </body>
+</html>
