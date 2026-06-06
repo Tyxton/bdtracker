@@ -8,7 +8,7 @@ services:
     volumes:
       - ./data:/app/data
     environment:
-      - DB_ROOT_DIR=/app/data/bdtracker.db
-      - DB_RAW_HOSTS=your_allowed_hosts       # e.g. "your_domain.com,192.168.1.1,localhost,etc"
-      - DB_RAW_ORIGINS=your_allowed_origins   # e.g. "https://your_domain.com,http://localhost,etc"
-      - DB_ADMIN_MASTER_KEY=your_admin_token  # python -c "import secrets; print(secrets.token_urlsafe(32))"
+      - BD_ROOT_DIR=/app/data/bdtracker.db
+      - BD_RAW_HOSTS=your_allowed_hosts       # e.g. "your_domain.com,192.168.1.1,localhost,etc"
+      - BD_RAW_ORIGINS=your_allowed_origins   # e.g. "https://your_domain.com,http://localhost,etc"
+      - BD_ADMIN_MASTER_KEY=your_admin_token  # python -c "import secrets; print(secrets.token_urlsafe(32))"
