@@ -430,11 +430,6 @@ buildSelectorTracks() {
                       try {
                         await BDTrackerAPI.submitEntry(payload); 
 
-                        if (!res.ok) {
-                          const err = await res.json();
-                          throw new Error(err.detail || "Database submission rejection.");
-                        }
-
                         this.toggleModal(this.elements.ingestModal, false);
                         await this.init();
 
