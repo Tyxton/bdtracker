@@ -1,4 +1,4 @@
-import { BDTrackerAPI } from "./api.js";
+import { BDTrackerAPI } from "/static/js/api.js";
 
 export class UIThemeEngine {
                     static getMoodTheme(val) {
