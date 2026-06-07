@@ -194,11 +194,14 @@ buildSelectorTracks() {
   try {
     const data = await BDTrackerAPI.generateShareLink(2); 
     const absoluteUrl = `${window.location.origin}${data.share_url}`;
-    this.showToast("CAPABILITY KEY COPIED (2H VALIDITY)", "success");
+    
+    await navigator.clipboard.writeText(absoluteUrl);
+      
+    this.showToast("SHARE LINK COPIED (VALID FOR 2 HOURS))", "success");
  
   } catch (error) {
     console.error("Link generation error:", error);
-    this.showToast("FAILED TO PROVISION CAPABILITY KEY", "error");
+    this.showToast("FAILED TO PROVISION SHARE LINK", "error");
   } finally {
     this.elements.generateShareLinkBtn.innerHTML = originalText;
     this.elements.generateShareLinkBtn.disabled = false;
