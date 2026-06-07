@@ -3,7 +3,7 @@ import secrets
 from datetime import datetime
 from fastapi import HTTPException, Query, Security, status, Query
 from db.database import get_db_connection
-from core.admin import validate_admin_access
+from core.admin import validate_admin_access, api_key_header
 
 def hash_token(token: str) -> str:
     """
