@@ -1,4 +1,5 @@
 import { BDTrackerAPI } from "/static/js/api.js";
+window.BDTrackerAPI = BDTrackerAPI;
 
 export class UIThemeEngine {
                     static getMoodTheme(val) {
