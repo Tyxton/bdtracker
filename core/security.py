@@ -5,6 +5,10 @@ from fastapi import HTTPException, Query, Security, status, Query
 from db.database import get_db_connection
 from core.admin import validate_admin_access, api_key_header
 
+
+from fastapi.security.api_key import APIKeyHeader
+api_key_header = APIKeyHeader(name="X-Admin-Token", auto_error=False)
+
 def hash_token(token: str) -> str:
     """
     Hashes token string with SHA-256 before scanning storage structures.
@@ -70,7 +74,7 @@ def validate_session_token(token: str = Query(..., description="The time-bound c
 
 def auth_query(
     token: str = Query(None), 
-    admin_key: str = Security(api_key_header, auto_error=False)
+    admin_key: str = Security(api_key_header)
 ):
     if admin_key and admin_key == os.getenv("BD_ADMIN_MASTER_KEY"):
         return {"type": "admin", "data": admin_key}
