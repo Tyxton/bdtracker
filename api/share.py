@@ -6,11 +6,13 @@ from db.database import get_db_connection
 from db.schemas import ShareTokenRequest, ShareTokenResponse, MindLogEntryOut
 from core.security import generate_secure_token, hash_token, validate_session_token
 from core.analysis import process_timeline_phases
+from core.admin import validate_admin_access
 
 router = APIRouter(prefix="/api/share", tags=["Clinical Sharing"])
 
 @router.post("/generate", response_model=ShareTokenResponse)
-def generate_share_link(request: ShareTokenRequest):
+def generate_share_link(request: ShareTokenRequest,
+                        token: str = Depends(validate_admin_access)):
     """
     Generates a high-entropy, cleartext token for the client, but records 
     only its SHA-256 hash in the database to prevent exposure via leaks.
