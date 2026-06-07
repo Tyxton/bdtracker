@@ -31,7 +31,7 @@ export const BDTrackerAPI = {
     return await response.json();
   },
 
-  async generateShareLink() {
+  async generateShareLink(duration = 2) {
     const response = await this.fetchWithAuth("/api/share/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
