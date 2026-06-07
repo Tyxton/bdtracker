@@ -182,35 +182,33 @@ buildSelectorTracks() {
                         if (modalElement === this.elements.ingestModal) this.resetFormState();
                       }
                     }
-async handleShareLinkGeneration() {
-                      const originalText = this.elements.generateShareLinkBtn.innerHTML;
-                      
-                      this.elements.generateShareLinkBtn.innerHTML = `
-                        <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        PROVISIONING...
-                      `;
-                      this.elements.generateShareLinkBtn.disabled = true;
+  async handleShareLinkGeneration() {
+  const originalText = this.elements.generateShareLinkBtn.innerHTML;
+  
+  this.elements.generateShareLinkBtn.innerHTML = `
+    <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+    PROVISIONING...
+  `;
+  this.elements.generateShareLinkBtn.disabled = true;
 
-                      try {
-                        const data = await BDTrackerAPI.generateShareLink(); 
+  try {
+    const response = await BDTrackerAPI.generateShareLink(); 
+    if (!response.ok) throw new Error("Backend token generation failed");
 
-                        if (!response.ok) throw new Error("Backend token generation failed");
+    const data = await response.json();
+    const absoluteUrl = `${window.location.origin}${data.share_url}`;
 
-                        const data = await response.json();
-                        const absoluteUrl = `${window.location.origin}${data.share_url}`;
+    await navigator.clipboard.writeText(absoluteUrl);
+    this.showToast("CAPABILITY KEY COPIED (2H VALIDITY)", "success");
 
-                        await navigator.clipboard.writeText(absoluteUrl);
-                        this.showToast("CAPABILITY KEY COPIED (2H VALIDITY)", "success");
-
-                      } catch (error) {
-                        console.error("Link generation error:", error);
-                        this.showToast("FAILED TO PROVISION CAPABILITY KEY", "error");
-                      } finally {
-                        this.elements.generateShareLinkBtn.innerHTML = originalText;
-                        this.elements.generateShareLinkBtn.disabled = false;
-                      }
-                    }
-
+  } catch (error) {
+    console.error("Link generation error:", error);
+    this.showToast("FAILED TO PROVISION CAPABILITY KEY", "error");
+  } finally {
+    this.elements.generateShareLinkBtn.innerHTML = originalText;
+    this.elements.generateShareLinkBtn.disabled = false;
+  }
+}
                     showToast(message, type = "success") {
                       const toast = document.createElement("div");
                       
