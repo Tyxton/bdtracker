@@ -192,12 +192,7 @@ async handleShareLinkGeneration() {
                       this.elements.generateShareLinkBtn.disabled = true;
 
                       try {
-                        // Default to the secure 2-hour window
-                        const response = await fetch("/api/share/generate", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ duration_hours: 2 })
-                        });
+                        const data = await BDTrackerAPI.generateShareLink(); 
 
                         if (!response.ok) throw new Error("Backend token generation failed");
 
@@ -264,7 +259,7 @@ async handleShareLinkGeneration() {
 
                     async init() {
                       try {
-                        const res = await fetch("/api/timeline");
+                        const res = await BDTrackerAPI.fetchWithAuth("/api/timeline");
                         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
                         this.data = await res.json();
 
@@ -435,11 +430,7 @@ async handleShareLinkGeneration() {
                       };
 
                       try {
-                        const res = await fetch("/api/entries", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify(payload)
-                        });
+                        await BDTrackerAPI.submitEntry(payload); 
 
                         if (!res.ok) {
                           const err = await res.json();
