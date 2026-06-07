@@ -10,7 +10,6 @@ export const BDTrackerAPI = {
 
     console.log("URL:", url);
     console.log("Headers Object:", options.headers);
-    const response = await fetch(url, options);
 
     const response = await fetch(url, options);
     return response;
