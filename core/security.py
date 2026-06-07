@@ -1,8 +1,9 @@
 import hashlib
 import secrets
 from datetime import datetime
-from fastapi import HTTPException, Query, Security, status
+from fastapi import HTTPException, Query, Security, status, Query
 from db.database import get_db_connection
+from core.admin import validate_admin_access
 
 def hash_token(token: str) -> str:
     """
@@ -66,3 +67,22 @@ def validate_session_token(token: str = Query(..., description="The time-bound c
         )
         
     return token
+
+def auth_query(
+    token: str = Query(None), 
+    admin_key: str = Security(api_key_header, auto_error=False)
+):
+    if admin_key and admin_key == os.getenv("BD_ADMIN_MASTER_KEY"):
+        return {"type": "admin", "data": admin_key}
+    
+    if token:
+        try:
+            validate_session_token(token)
+            return {"type": "guest", "data": token}
+        except HTTPException:
+            raise
+            
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED, 
+        detail="Unauthorized: Valid Admin Token or Session Token required."
+    )

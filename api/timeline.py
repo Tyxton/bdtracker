@@ -5,13 +5,13 @@ from typing import List
 from db.database import get_db_connection, DB_PATH
 from db.schemas import MindLogEntryOut
 from core.analysis import process_timeline_phases
-from core.admin import validate_admin_access
+from core.security import auth_query
 
 logger = logging.getLogger(__name__)
 router = APIRouter(
         prefix="/api/timeline",
         tags=["Timeline Access"],
-        dependencies=[Depends(validate_admin_access)]
+        dependencies=[Depends(auth_query)]
 )
 
 @router.get("", response_model=List[MindLogEntryOut])
