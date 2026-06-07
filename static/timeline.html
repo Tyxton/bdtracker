@@ -15,7 +15,7 @@
     >
       <div class="flex items-center gap-3">
         <h1 class="text-lg font-semibold tracking-tight text-zinc-200">
-          BDTracker - B. Tyler Sexton
+          BDTracker - Bipolar Management
         </h1>
         <span
           id="statusBadge"
@@ -24,6 +24,17 @@
           Connecting
         </span>
       </div>
+      <div class="flex gap-3">
+    <button id="generateShareLinkBtn" class="bg-zinc-950 hover:bg-zinc-800 text-zinc-400 hover:text-emerald-400 font-medium px-4 py-2 rounded-lg text-sm border border-zinc-800 transition-all flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+      Generate Session Link
+    </button>
+      <button
+        id="openIngestModalBtn"
+        class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium px-4 py-2 rounded-lg text-sm border border-zinc-700/80 transition-all shadow-sm"
+      >
+        Log Current State
+      </button>
     </header>
 
     <main class="flex flex-col gap-6 w-full">
@@ -156,6 +167,420 @@
       </section>
     </main>
 
+    <div
+      id="ingestModal"
+      class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-6"
+    >
+      <div
+        class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden transition-all duration-200"
+      >
+        <div
+          class="flex justify-between items-center border-b border-zinc-800/60 p-6"
+        >
+          <h3 class="text-sm font-semibold tracking-wider uppercase text-zinc-400">
+            Log New Entry System Patch
+          </h3>
+          <button
+            id="closeIngestModalBtn"
+            type="button"
+            class="text-zinc-500 hover:text-zinc-300 text-xs font-medium transition cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+        <div class="overflow-y-auto p-6 flex flex-col gap-6">
+          <form id="ingestionForm" class="flex flex-col gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="text-zinc-400 text-xs font-semibold tracking-wide uppercase"
+                >Mood Level:</label
+              >
+              <div
+                id="moodTrackContainer"
+                class="flex w-full h-9 border border-zinc-800 rounded-lg overflow-hidden bg-zinc-950 p-0.5 gap-0.5"
+              ></div>
+              <input type="hidden" id="formMood" />
+              <span
+                id="moodSelectorPreview"
+                class="text-xs font-medium text-zinc-500 mt-0.5"
+                >Select a level from the track above (Optional if logging pure
+                narrative)</span
+              >
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-zinc-400 text-xs font-semibold tracking-wide uppercase"
+                >Energy Level:</label
+              >
+              <div
+                id="energyTrackContainer"
+                class="flex w-full h-9 border border-zinc-800 rounded-lg overflow-hidden bg-zinc-950 p-0.5 gap-0.5"
+              ></div>
+              <input type="hidden" id="formEnergy" />
+              <span
+                id="energySelectorPreview"
+                class="text-xs font-medium text-zinc-500 mt-0.5"
+                >Select a level from the track above (Optional if logging pure
+                narrative)</span
+              >
+            </div>
+
+            <div
+              class="border border-zinc-800 rounded-xl p-4 bg-zinc-950/40 flex flex-col gap-4"
+            >
+              <span
+                class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block border-b border-zinc-800/80 pb-1.5"
+                >Contextual Vector & Trigger Tracking Flags</span
+              >
+
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Emotional Section -->
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="text-xs font-bold text-rose-400/80 tracking-tight pl-1"
+                    >EMOTIONAL</span
+                  >
+                  <div class="flex flex-col gap-1.5 text-xs text-zinc-300">
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Anxious"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Anxious
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Worried, nervous, unease</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Depressed"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Depressed
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Hopeless, low-motivation</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Energetic"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Energetic
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| High drive, racing thoughts</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Paranoid"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Paranoid
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Hyper-vigilant, defensive</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Stable"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Stable
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Balanced, centered baseline</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Irritable"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Irritable
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Low patience, snappy impulse</span
+                        ></span
+                      ></label
+                    >
+                  </div>
+                </div>
+
+                <!-- Environmental Section -->
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="text-xs font-bold text-blue-400/80 tracking-tight pl-1"
+                    >ENVIRONMENTAL</span
+                  >
+                  <div class="flex flex-col gap-1.5 text-xs text-zinc-300">
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Work Stress"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Work Stress
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Deadlines, workloads</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Relationship Stress"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Relationship
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Misunderstandings, friction</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Date"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Date
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Social pressures, anxiety</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Homelab"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Homelab
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| System breaks, config fatigue</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Hyperfixation"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Hyperfixation
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Ignoring internal health needs</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Social Drain"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Social Drain
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Interaction exhaustion</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Financial Stress"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Financial
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Bills, budgeting friction</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Travel"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Travel
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Relocations, routine shifts</span
+                        ></span
+                      ></label
+                    >
+                  </div>
+                </div>
+
+                <!-- Physiological Section -->
+                <div class="flex flex-col gap-2">
+                  <span
+                    class="text-xs font-bold text-amber-400/80 tracking-tight pl-1"
+                    >PHYSIOLOGICAL</span
+                  >
+                  <div class="flex flex-col gap-1.5 text-xs text-zinc-300">
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Insomnia"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Insomnia
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Broken, short, unachieved sleep</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Decreased Appetite"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Low Appetite
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Forgetting food, aversion</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Increased Appetite"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >High Appetite
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Craving spikes, stress eating</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Caffeine Intake"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Caffeine
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Energy drinks, coffee</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Medicine Change"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Med Change
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Titrations, dosage adjustments</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Medication Non-Adherance"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Non-Adherance
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Skipped or late dose allocations</span
+                        ></span
+                      ></label
+                    >
+                    <label
+                      class="flex items-start gap-2 cursor-pointer hover:bg-zinc-900/50 p-1 rounded transition"
+                      ><input
+                        type="checkbox"
+                        name="triggerTag"
+                        value="Alcohol/Substance Intake"
+                        class="mt-0.5 accent-emerald-500"
+                      /><span
+                        >Substance
+                        <span class="text-zinc-500 block text-[10px]"
+                          >| Social drinking, hangover</span
+                        ></span
+                      ></label
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-xs font-semibold text-zinc-400 tracking-wide uppercase"
+                >Journal Entry:</label
+              >
+              <textarea
+                id="formJournal"
+                placeholder="Provide context regarding environment, symptoms, or thoughts..."
+                class="w-full h-32 bg-zinc-950 border border-zinc-800/80 rounded-xl p-4 text-zinc-300 text-sm focus:outline-none focus:border-zinc-700 placeholder-zinc-600 resize-none transition"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white font-medium text-sm py-3 px-4 rounded-xl border border-zinc-700/50 shadow-md transition-all duration-150 cursor-pointer"
+            >
+              Submit Entry
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <!-- Viewer Log Modal -->
     <div
       id="viewerModal"
@@ -194,6 +619,5 @@
         ></div>
       </div>
     </div>
-    <script type="module" src="/static/js/app.js"></script>
+                          <script type="module" src="/static/js/app.js?v=1.0.2"></script>
   </body>
-</html>

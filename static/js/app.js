@@ -254,11 +254,22 @@ buildSelectorTracks() {
                     }
 
                     async init() {
-                      try {
-                        const res = await BDTrackerAPI.fetchWithAuth("/api/timeline");
-                        if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                        this.data = await res.json();
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const sharedToken = urlParams.get('token');
 
+                      try {
+                        let data;
+                        if (sharedToken) {
+                            data = await BDTrackerAPI.getSharedTimeline(sharedToken);
+                            this.elements.openIngestModalBtn.style.display = 'none';
+                            this.elements.generateShareLinkBtn.style.display = 'none';
+                        } else {
+                            const res = await BDTrackerAPI.fetchWithAuth("/api/timeline");
+                            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+                            data = await res.json();
+                        }
+
+                        this.data=data;  
                         this.renderChart();
                         this.renderMatrix();
                         this.updateStatus("Live", "bg-zinc-900 text-emerald-400 border border-zinc-800/80");
