@@ -1,13 +1,13 @@
 export const BDTrackerAPI = {
-  async fetchWithAuth(url, options = {}) {
-    const masterToken = localStorage.getItem("bd_admin_token") || "";
+  async fetchWithAuth(url, options = {}, includeAdminToken = true) {
+    const headers = { ...options.headers, "Content-Type": "application/json" };
 
-    options.headers = {
-      ...options.headers,
-      "X-Admin-Token": masterToken,
-      "Content-Type": "application/json",
-    };
+    if (includeAdminToken) {
+      const masterToken = localStorage.getItem("bd_admin_token") || "";
+      headers["X-Admin-Token"] = masterToken;
+    }
 
+    options.headers = headers;
     const response = await fetch(url, options);
     return response;
   },
@@ -53,6 +53,8 @@ export const BDTrackerAPI = {
   async getSharedTimeline(token) {
     const response = await this.fetchWithAuth(
       `/api/timeline?token=${encodeURIComponent(token)}`,
+      {},
+      false,
     );
     if (!response.ok) throw new Error(`Token verification failed.`);
     return await response.json();

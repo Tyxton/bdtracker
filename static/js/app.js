@@ -1,6 +1,19 @@
 import { BDTrackerAPI } from "/static/js/api.js";
 window.BDTrackerAPI = BDTrackerAPI;
 
+// This allows injecting your bd_admin_token into a PWA for mobile use,
+// right now this is the only work around I can think of that is still
+// secure enough to use in prod. bdtracker.yourdomain.com/#bd_admin_token
+
+window.addEventListener('load', () => {
+    const hash = window.location.hash.substring(1);
+    if (window.location.hash.startsWith('#') && !localStorage.getItem("bd_admin_token")) {
+        const token = window.location.hash.substring(1);
+        localStorage.setItem("bd_admin_token", token);
+        window.location.hash = ""; 
+    }
+});
+
 export class UIThemeEngine {
                     static getMoodTheme(val) {
                       if (val === null) return { text: "text-zinc-500", bg: "bg-zinc-950 border-zinc-800/80" };
@@ -87,7 +100,7 @@ export class UIThemeEngine {
                       this.bindEvents();
                       this.init();
                     }
-      
+
 buildSelectorTracks() {
   ['mood', 'energy'].forEach(type => {
     const container = type === 'mood' ? this.elements.moodTrackContainer : this.elements.energyTrackContainer;
