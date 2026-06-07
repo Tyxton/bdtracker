@@ -192,15 +192,10 @@ buildSelectorTracks() {
   this.elements.generateShareLinkBtn.disabled = true;
 
   try {
-    const response = await BDTrackerAPI.generateShareLink(2); 
-    if (!response.ok) throw new Error("Backend token generation failed");
-
-    const data = await response.json();
+    const data = await BDTrackerAPI.generateShareLink(2); 
     const absoluteUrl = `${window.location.origin}${data.share_url}`;
-
-    await navigator.clipboard.writeText(absoluteUrl);
     this.showToast("CAPABILITY KEY COPIED (2H VALIDITY)", "success");
-
+ 
   } catch (error) {
     console.error("Link generation error:", error);
     this.showToast("FAILED TO PROVISION CAPABILITY KEY", "error");
