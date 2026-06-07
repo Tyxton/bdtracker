@@ -32,22 +32,23 @@ export const BDTrackerAPI = {
   },
 
   async generateShareLink(duration = 2) {
-  const response = await this.fetchWithAuth("/api/share/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ duration_hours: duration }),
-  });
-  
-  if (!response.ok) throw new Error(`Token factory failure: ${response.status}`);
-  
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return await response.json();
-  } else {
-    const text = await response.text();
-    return { share_url: text };
-  }
-}
+    const response = await this.fetchWithAuth("/api/share/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ duration_hours: duration }),
+    });
+
+    if (!response.ok)
+      throw new Error(`Token factory failure: ${response.status}`);
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    } else {
+      const text = await response.text();
+      return { share_url: text };
+    }
+  },
 
   async getSharedTimeline(token) {
     const response = await fetch(
