@@ -41,11 +41,11 @@ export const BDTrackerAPI = {
     if (!response.ok)
       throw new Error(`Token factory failure: ${response.status}`);
 
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      return await response.json();
-    } else {
-      const text = await response.text();
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      console.warn("Backend did not return JSON, treating as raw string.");
       return { share_url: text };
     }
   },
