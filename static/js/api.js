@@ -52,7 +52,7 @@ export const BDTrackerAPI = {
 
   async getSharedTimeline(token) {
     const response = await this.fetchWithAuth(
-      `/api/share/timeline-data?token=${encodeURIComponent(token)}`,
+      `/api/timeline?token=${encodeURIComponent(token)}`,
     );
     if (!response.ok) throw new Error(`Token verification failed.`);
     return await response.json();
