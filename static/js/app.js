@@ -192,7 +192,7 @@ buildSelectorTracks() {
   this.elements.generateShareLinkBtn.disabled = true;
 
   try {
-    const response = await BDTrackerAPI.generateShareLink(); 
+    const response = await BDTrackerAPI.generateShareLink(2); 
     if (!response.ok) throw new Error("Backend token generation failed");
 
     const data = await response.json();

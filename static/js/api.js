@@ -8,9 +8,6 @@ export const BDTrackerAPI = {
       "Content-Type": "application/json",
     };
 
-    console.log("URL:", url);
-    console.log("Headers Object:", options.headers);
-
     const response = await fetch(url, options);
     return response;
   },
@@ -38,7 +35,7 @@ export const BDTrackerAPI = {
     const response = await this.fetchWithAuth("/api/share/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
+      body: JSON.stringify({ duration_hours: duration }),
     });
     if (!response.ok)
       throw new Error(`Token factory failure: ${response.status}`);
